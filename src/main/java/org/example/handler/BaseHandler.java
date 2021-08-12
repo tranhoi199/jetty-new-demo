@@ -8,6 +8,7 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.apache.thrift.transport.TTransportException;
 import org.apache.thrift.transport.layered.TFramedTransport;
+import org.example.config.Config;
 import org.example.gen.SongService;
 
 import javax.servlet.ServletException;
@@ -24,9 +25,10 @@ import java.util.Set;
 public abstract class BaseHandler extends HttpServlet {
 
     protected SongService.Client client;
-
+    private Map config = Config.getInstance().getConfig();
     public BaseHandler() throws TTransportException {
-        TTransport transport = new TFramedTransport(new TSocket("localhost", 9090));
+        int port = Integer.parseInt((String) config.get("thriftPort"));
+        TTransport transport = new TFramedTransport(new TSocket((String) config.get("thriftHost"), port));
         transport.open();
         TProtocol protocol = new TBinaryProtocol(transport);
         client = new SongService.Client(protocol);

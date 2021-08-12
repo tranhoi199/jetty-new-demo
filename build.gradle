@@ -16,6 +16,7 @@ dependencies {
     implementation 'org.eclipse.jetty:jetty-maven-plugin:9.3.17.v20170317'
     implementation 'org.apache.thrift:libthrift:0.14.2'
     implementation 'com.google.code.gson:gson:2.8.7'
+    implementation 'org.ini4j:ini4j:0.5.2'
     implementation fileTree(dir: 'libs', includes: ['*.jar'])
 
 
