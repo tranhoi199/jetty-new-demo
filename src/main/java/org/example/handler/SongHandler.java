@@ -54,6 +54,10 @@ public class SongHandler extends BaseHandler {
                 _printResponse(HttpServletResponse.SC_NOT_ACCEPTABLE, message, resp, out);
                 return;
             }
+            //remove cache if delete successfully
+            if (returnCode.getValue() == 200) {
+                cache.remove(songId);
+            }
 
             String message = new Gson().toJson(new CreateObjectResponse(HttpServletResponse.SC_OK, "remove successfully"));
             _printResponse(HttpServletResponse.SC_OK, message, resp, out);
@@ -79,6 +83,8 @@ public class SongHandler extends BaseHandler {
             SongResponse songResponse;
             //check if cache contain song and get from cache
             if (cache.isContainKey(songId)) {
+                System.out.println("get value from cache");
+
                 Song song = cache.get(songId);
                 songResponse = new SongResponse(200, song);
             } else {
@@ -86,6 +92,7 @@ public class SongHandler extends BaseHandler {
                 songResponse = client.getSong(songId);
                 //if successfully get song, put in cache
                 if (songResponse.getCode() == 200) {
+                    System.out.println("put value to cache");
                     cache.add(songResponse.getSong());
                 }
             }
@@ -96,7 +103,7 @@ public class SongHandler extends BaseHandler {
                 return;
             }
 
-            String message =  new Gson().toJson(songResponse);
+            String message = new Gson().toJson(songResponse);
             _printResponse(HttpServletResponse.SC_OK, message, resp, out);
 
         } catch (TException e) {
@@ -131,9 +138,9 @@ public class SongHandler extends BaseHandler {
 
         JsonArray jsonArray = (JsonArray) requestBodyJson.get("singer");
         List<String> singers = _jsonArrayToList(jsonArray);
-
+        int songId = Integer.parseInt(requestBodyJson.get("id").getAsString());
         Song song = new Song(
-                Integer.parseInt(requestBodyJson.get("id").getAsString()),
+                songId,
                 requestBodyJson.get("title").getAsString(),
                 singers
         );
@@ -143,6 +150,11 @@ public class SongHandler extends BaseHandler {
                 String message = new Gson().toJson(new CreateObjectResponse(returnCode.getValue(), "invalid song"));
                 _printResponse(HttpServletResponse.SC_NOT_ACCEPTABLE, message, resp, out);
                 return;
+            }
+
+            //remove cache if update is successfully
+            if (returnCode.getValue() == 200) {
+                cache.remove(songId);
             }
 
             String message = new Gson().toJson(new CreateObjectResponse(returnCode.getValue(), "updated successfully"));

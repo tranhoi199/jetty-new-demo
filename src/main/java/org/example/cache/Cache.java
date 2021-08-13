@@ -43,4 +43,12 @@ public class Cache {
         }
         return song.getId();
     }
+
+    public int remove(int key) {
+        if (cache.containsKey(key)) {
+            cache.remove(key);
+            return key;
+        }
+        return -1;
+    }
 }
