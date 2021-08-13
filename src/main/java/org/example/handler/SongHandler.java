@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.apache.thrift.TException;
 import org.apache.thrift.transport.TTransportException;
+import org.example.cache.Cache;
 import org.example.gen.ReturnCode;
 import org.example.gen.Song;
 import org.example.gen.SongResponse;
@@ -18,7 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 public class SongHandler extends BaseHandler {
+    Cache cache = Cache.getInstance();
+
     public SongHandler() throws TTransportException {
+
     }
 
     private List<String> _jsonArrayToList(JsonArray jsonArray) {
@@ -72,7 +76,19 @@ public class SongHandler extends BaseHandler {
 
         try {
             int songId = Integer.parseInt(requestId);
-            SongResponse songResponse = client.getSong(songId);
+            SongResponse songResponse;
+            //check if cache contain song and get from cache
+            if (cache.isContainKey(songId)) {
+                Song song = cache.get(songId);
+                songResponse = new SongResponse(200, song);
+            } else {
+                // get song from song service
+                songResponse = client.getSong(songId);
+                //if successfully get song, put in cache
+                if (songResponse.getCode() == 200) {
+                    cache.add(songResponse.getSong());
+                }
+            }
 
             if (songResponse.getCode() == 406) {
                 String message = new Gson().toJson(new SongResponse(HttpServletResponse.SC_NOT_ACCEPTABLE, null));
