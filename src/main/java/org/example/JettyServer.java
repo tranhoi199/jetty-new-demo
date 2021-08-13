@@ -33,6 +33,7 @@ public class JettyServer {
         handler.addServletWithMapping(SongListenHandler.class, "/songs/listen");
         handler.addServletWithMapping(ArtistSongHandler.class, "/songs/artist");
         handler.addServletWithMapping(TopSongHandler.class, "/songs/topsongs");
+        handler.addServletWithMapping(HomeHandler.class, "/home");
         server.setHandler(handler);
     }
 }

@@ -1,0 +1,48 @@
+@import org.example.gen.Song
+@import java.util.List
+@args(){
+List<Song> listSong
+}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>local</title>
+    <style>
+        th, td {
+            border: 1px solid black;
+        }
+
+        table {
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+    </script>
+</head>
+<body>
+<table>
+    <tr>
+        <th>Title</th>
+        <th>Singers</th>
+        <th>Actions</th>
+    </tr>
+
+    @for(Song song: listSong) {
+        <tr>
+            <td>@song.getTitle()</td>
+            <td>@song.getSinger()</td>
+            <td>
+                <a href="localhost:8080/home">Edit</a>
+                <a href="localhost:8080/home">Update</a>
+            </td>
+        </tr>
+    }
+
+</table>
+
+</body>
+</html>
