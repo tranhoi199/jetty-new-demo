@@ -22,12 +22,47 @@ List<Song> listSong
                     type: 'delete',
                     data: `id=${id}`,
                     success: function (result) {
-                        location.reload();
+                        // location.reload();
                     }
                 })
             });
+
+            $(".edit").click(function () {
+                var id = $(this).closest("tr").find(".id").text();
+                var title = $(this).closest("tr").find(".title").text();
+                var singer = $(this).closest("tr").find(".singer").text();
+                $("#title").val(title);
+                $("#singer").val(singer);
+                $("#id").val(id);
+            });
+
+            $(".update").click(function (){
+                var id = $(this).closest("tr").find(".id").text();
+                alert($("#title").val());
+                var temp = JSON.stringify({
+                    id: $("#id").val(),
+                    title: $("#title").val(),
+                    singer: [$("#singer").val()]
+                });
+                console.log(temp);
+                $.ajax({
+                    url: "http://localhost:8080/songs",
+                    type: "put",
+                    contentType: "application/json",
+                    data: JSON.stringify(`
+                        id: $("#id").val(),
+                        title: $("#title").val(),
+                        singer: [$("#singer").val()]`
+                    )
+                });
+            });
+
         });
     </script>
+
+
+
+
 </head>
 <body>
 <div class="text-center">
@@ -71,6 +106,27 @@ List<Song> listSong
         }
         </tbody>
     </table>
+</div>
+
+<div class="container">
+    <form>
+        <div class="form-group">
+            <label for="id">ID
+            </label>
+            <input type="text" class="form-control" id="id" disabled>
+        </div>
+        <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" class="form-control" id="title">
+        </div>
+
+        <div class="form-group">
+            <label for="singer">Singers:</label>
+            <input type="text" class="form-control" id="singer">
+        </div>
+
+        <button class="btn btn-primary update">Update</button>
+    </form>
 </div>
 
 </body>

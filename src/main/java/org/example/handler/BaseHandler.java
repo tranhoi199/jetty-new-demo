@@ -2,6 +2,8 @@ package org.example.handler;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import jdk.nashorn.internal.parser.JSONParser;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
@@ -120,6 +122,7 @@ public abstract class BaseHandler extends HttpServlet {
         JsonParser parser = new JsonParser();
         if (reqReader.ready()) {
             requestJson = (JsonObject) parser.parse(reqReader);
+//            requestJson = (JsonObject) JsonParser.parseReader(reqReader).getAsJsonObject();;
         }
         return requestJson;
     }
