@@ -15,6 +15,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Reader;
@@ -23,7 +24,6 @@ import java.util.Map;
 import java.util.Set;
 
 public abstract class BaseHandler extends HttpServlet {
-
     protected SongService.Client client;
     private Map config = Config.getInstance().getConfig();
     public BaseHandler() throws TTransportException {
@@ -82,7 +82,7 @@ public abstract class BaseHandler extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         _setResponseType(resp);
         try {
-            Map mapParams = _getAllParameter(req);
+            Map mapParams = getBody(req);
             doDeleteOperation(mapParams, resp);
 
         } catch (Exception e) {
@@ -122,6 +122,28 @@ public abstract class BaseHandler extends HttpServlet {
             requestJson = (JsonObject) parser.parse(reqReader);
         }
         return requestJson;
+    }
+
+    public Map<String, String> getBody(HttpServletRequest request) {
+        StringBuilder sb = new StringBuilder();
+        try (BufferedReader reader = request.getReader()) {
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+        } catch (Exception ex) {
+            sb.setLength(0);
+        }
+
+        String para = sb.toString();
+        Map<String, String> res = new HashMap<>();
+        for (String i : para.split("&")) {
+            String[] t = i.split("=");
+            System.out.println(t[0]);
+            System.out.println(t[1]);
+            res.put(t[0], t[1]);
+        }
+        return res;
     }
 
 

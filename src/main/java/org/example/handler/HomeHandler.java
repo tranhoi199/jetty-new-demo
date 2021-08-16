@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.Map;
 
 public class HomeHandler extends HttpServlet {
+    private Rythm rythmEngine = new Rythm();
     protected SongService.Client client;
     private Map config = Config.getInstance().getConfig();
-    private final Rythm rythmEngine = new Rythm();
     public HomeHandler() throws TTransportException {
         int port = Integer.parseInt((String) config.get("thriftPort"));
         TTransport transport = new TFramedTransport(new TSocket((String) config.get("thriftHost"), port));
@@ -49,7 +49,6 @@ public class HomeHandler extends HttpServlet {
     private List<Song>  _getArtistListSong(String artist) {
         try{
             ArtistListSongResponse artistListSongResponse = client.getSongsByArtist("Ed Sheeran");
-            // if object return is success, return a list
             if (artistListSongResponse.getCode() == 200) {
                 return artistListSongResponse.getListSong();
             }
@@ -66,7 +65,7 @@ public class HomeHandler extends HttpServlet {
         String result;
         List<Song> songList = _getArtistListSong("Ed Sheeran");
         try {
-            result = rythmEngine.getRythmEngine().render("home.html", songList, "song2");
+            result = rythmEngine.getRythmEngine().render("home.html", songList);
         } catch (Exception e) {
             result = "<h1>Something wrong when engine render</h1>";
             e.printStackTrace();

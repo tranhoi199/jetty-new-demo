@@ -14,7 +14,7 @@ public class Config {
     private static Config instance;
     private Map<String, String> config;
 
-    public Config() {
+    private Config() {
         try {
             Ini ini = new Ini(new File(SERVER_INI_FILE));
             config = new HashMap<>();
@@ -37,4 +37,6 @@ public class Config {
         }
         return instance;
     }
+
+
 }

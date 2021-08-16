@@ -41,6 +41,7 @@ public class SongHandler extends BaseHandler {
 
         String requestId = (String) mapParams.get("id");
         if (requestId == null) {
+            System.out.println("id is null");
             String message = new Gson().toJson(new SongResponse(HttpServletResponse.SC_BAD_REQUEST, null));
             _printResponse(HttpServletResponse.SC_BAD_REQUEST, message, resp, out);
             return;

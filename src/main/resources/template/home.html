@@ -8,41 +8,70 @@ List<Song> listSong
 <head>
     <meta charset="UTF-8">
     <title>local</title>
-    <style>
-        th, td {
-            border: 1px solid black;
-        }
 
-        table {
-            margin-left: auto;
-            margin-right: auto;
-        }
-    </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script>
-
+        $(document).ready(function () {
+            $(".remove").click(function () {
+                var id = $(this).closest("tr").find(".id").text();
+                $.ajax({
+                    url: "http://localhost:8080/songs",
+                    type: 'delete',
+                    data: `id=${id}`,
+                    success: function (result) {
+                        location.reload();
+                    }
+                })
+            });
+        });
     </script>
 </head>
 <body>
-<table>
-    <tr>
-        <th>Title</th>
-        <th>Singers</th>
-        <th>Actions</th>
-    </tr>
-
-    @for(Song song: listSong) {
+<div class="text-center">
+    <h1>List Songs</h1>
+</div>
+<div class="container">
+    <table class="table table-hover">
+        <thead>
         <tr>
-            <td>@song.getTitle()</td>
-            <td>@song.getSinger()</td>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Singers</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        @for(Song song: listSong) {
+        @{
+        int songId = song.getId();
+        }
+        <tr>
+            <td class="id">@song.getId()</td>
+            <td class="title">@song.getTitle()</td>
+            @{
+            String artistRender = String.join(",", song.getSinger());
+            }
+            <td class="singer">
+                @artistRender
+            </td>
+
             <td>
-                <a href="localhost:8080/home">Edit</a>
-                <a href="localhost:8080/home">Update</a>
+                @{
+                String idEdit = "edit" + String.valueOf(songId);
+                String idUpdate = "update" + String.valueOf(songId);
+                }
+                <button class="btn btn-success edit">Edit</button>
+                <button class="btn btn-danger remove">Remove</button>
             </td>
         </tr>
-    }
-
-</table>
+        }
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>
