@@ -36,10 +36,10 @@ public class SongHandler extends BaseHandler {
     }
 
     @Override
-    protected void doDeleteOperation(Map mapParams, HttpServletResponse resp) throws IOException {
+    protected void doDeleteOperation(JsonObject mapParams, HttpServletResponse resp) throws IOException {
         PrintWriter out = resp.getWriter();
 
-        String requestId = (String) mapParams.get("id");
+        String requestId =  mapParams.get("id").getAsString();
         if (requestId == null) {
             System.out.println("id is null");
             String message = new Gson().toJson(new SongResponse(HttpServletResponse.SC_BAD_REQUEST, null));

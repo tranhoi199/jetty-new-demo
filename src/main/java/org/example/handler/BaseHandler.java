@@ -2,8 +2,6 @@ package org.example.handler;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.google.gson.stream.JsonReader;
-import jdk.nashorn.internal.parser.JSONParser;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
@@ -84,8 +82,9 @@ public abstract class BaseHandler extends HttpServlet {
     protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         _setResponseType(resp);
         try {
-            Map mapParams = getBody(req);
-            doDeleteOperation(mapParams, resp);
+//            Map mapParams = getBody(req);
+            JsonObject requestBodyJson = _getBodyJson(req);
+            doDeleteOperation(requestBodyJson, resp);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,7 +92,7 @@ public abstract class BaseHandler extends HttpServlet {
 
     }
 
-    protected abstract void doDeleteOperation(Map mapParams, HttpServletResponse resp) throws IOException;
+    protected abstract void doDeleteOperation(JsonObject mapParams, HttpServletResponse resp) throws IOException;
 
     private Map _getAllParameter(HttpServletRequest request) {
         Map<String, Object> map = new HashMap<>();

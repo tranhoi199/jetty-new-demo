@@ -19,10 +19,11 @@ List<Song> listSong
                 var id = $(this).closest("tr").find(".id").text();
                 $.ajax({
                     url: "http://localhost:8080/songs",
-                    type: 'delete',
-                    data: `id=${id}`,
+                    type: "DELETE",
+                    contentType: "application/json",
+                    data: JSON.stringify(id={id}),
                     success: function (result) {
-                        // location.reload();
+                        location.reload();
                     }
                 })
             });
@@ -39,11 +40,6 @@ List<Song> listSong
             $(".update").click(function (){
                 var id = $(this).closest("tr").find(".id").text();
                 alert($("#title").val());
-                var temp = JSON.stringify({
-                    id: $("#id").val(),
-                    title: $("#title").val(),
-                    singer: [$("#singer").val()]
-                });
                 console.log(temp);
                 $.ajax({
                     url: "http://localhost:8080/songs",

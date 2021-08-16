@@ -65,7 +65,7 @@ public class TopSongHandler extends BaseHandler {
     }
 
     @Override
-    protected void doDeleteOperation(Map mapParams, HttpServletResponse resp) throws IOException {
+    protected void doDeleteOperation(JsonObject mapParams, HttpServletResponse resp) throws IOException {
 
     }
 }
